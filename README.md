@@ -36,3 +36,12 @@ $("div").draggable({
 
 <h3>Demo:</h3>
 http://jsfiddle.net/yelton/2TQgB/
+
+
+<br>
+
+<ul>
+<li>Requires jQuery 1.7.2 or higher</li>
+<li>Supports most browsers - Chrome, Safari, Firefox, IE7+</li>
+
+</ul>
