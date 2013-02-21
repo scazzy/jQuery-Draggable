@@ -1,4 +1,3 @@
-
 Lightweight Draggable() jquery plugin
 
 <h2>jQuery Draggable()</h2>
@@ -30,3 +29,10 @@ $("div").draggable({
   containParent: true
 });
 </pre>
+
+<br>
+<hr/>
+<br>
+
+<h3>Demo:</h3>
+http://jsfiddle.net/yelton/2TQgB/
