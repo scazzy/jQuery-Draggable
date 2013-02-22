@@ -8,19 +8,23 @@
 
 
 $.fn.draggable = function (opt) {
-
-    opt = $.extend({
+    var base = this;
+    var settings = {
         handle: "",
         cursor: "move",
         axis: null,
         containParent: false
-    }, opt);
+    };
+
+    opt = $.extend(settings, opt);
 
     if (opt.handle === "") {
-        var $el = this;
+        var $el = base;
     } else {
-        var $el = this.find(opt.handle);
+        var $el = base.find(opt.handle);
     }
+
+
 
     return $el.css('cursor', opt.cursor).on("mousedown", function (e) {
         if (opt.handle === "") {
@@ -35,10 +39,17 @@ $.fn.draggable = function (opt) {
             pos_x = $drag.offset().left + drg_w - e.pageX;
 
 
-        var parW = $($el).parents().outerWidth(),
-            parH = $($el).parents().outerHeight();
+        var parent = $(this).parent();
 
-        // console.log($drag.offset().top + ", " + pos_y);
+        var parW = parent.width(),
+            parH = parent.height();
+
+        var parX1 = parseInt(parent.offset().left) + parseInt(parent.css('padding-left').replace('px', '')),
+            parX2 = parX1 + parW,
+            parY1 = parseInt(parent.offset().top) + parseInt(parent.css('padding-top').replace('px', '')),
+            parY2 = parY1 + parH;
+
+
 
         $drag.css('z-index', 1000).parents().on("mousemove", function (e) {
             var off_top = e.pageY + pos_y - drg_h,
@@ -46,10 +57,10 @@ $.fn.draggable = function (opt) {
                 offst = null;
 
             if (opt.containParent === true) {
-                if (off_left < 0) off_left = 0;
-                if (off_left > parW - drg_w) off_left = parW - drg_w;
-                if (off_top < 0) off_top = 0;
-                if (off_top > parH - drg_h) off_top = parH - drg_h;
+                if (off_left < parX1) off_left = parX1;
+                if (off_left > parX2 - drg_w) off_left = parX2 - drg_w;
+                if (off_top < parY1) off_top = parY1;
+                if (off_top > parY2 - drg_h) off_top = parY2 - drg_h;
             }
 
             if (opt.axis == "x") {
@@ -67,9 +78,11 @@ $.fn.draggable = function (opt) {
                 };
             }
 
-            $('.draggable').offset(offst).on("mouseup", function () {
+            $('.draggable').offset(offst);
+
+            $('.draggable, html').on("mouseup", function () {
                 $drag.parents().off('mousemove');
-                $(this).removeClass('draggable').css('z-index', z_idx);
+                $($el).removeClass('draggable').css('z-index', z_idx);
             });
 
         });
